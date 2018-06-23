@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>GitHub Project</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container">
+<CENTER>
+<div class="well well-sm"><h2>Admin Module</h2></div>
+</CENTER>
+<div class="well well-sm">
+<h3>Fetch GitHub Users</h3><br/>
+<form class="form-horizontal" action="{% url 'FetchDataView' %}" method="POST">{% csrf_token %}
+	<div class="form-group">
+  		<label class="control-label col-sm-2" for="starting_id">Enter user ID to start with : </label>
+  		<div class="col-sm-6">
+  			<input class="form-control" type="number" name="starting_id" placeholder="Enter ID" id="starting_id" required>
+  		</div>
+    </div>
+    <div class="form-group">
+  		<label class="control-label col-sm-2" for="no_of_records">Number of records : </label>
+  		<div class="col-sm-6">
+  			<input class="form-control" type="number" name="no_of_records" placeholder="Number of records next to Fetch ID" id="no_of_records" required>
+  		</div>
+    </div>
+    {% if form.no_of_records.errors %}
+    <div class="col-sm-2">
+    </div>
+    <div class="alert alert-danger col-sm-6">
+	    <strong>Max allowed record number is 10</strong>
+	</div>
+    {% endif %}
+  <div class="form-group">        
+      <div class="col-sm-offset-2 col-sm-10">
+        <button type="submit" class="btn btn-success">Submit</button>
+      </div>
+   </div>
+</form> 
+</div>
+<div class="container">
+	<div class="col-sm-3">
+	<h3>Record Summary</h3>
+	</div>
+	<div class="col-sm-3">
+	<h3>Today : {{day}}</h3>
+	</div>
+	<div class="col-sm-3">
+	<h3>Week Ago : {{week}}</h3>
+	</div>
+	<div class="col-sm-3">
+	<h3>Month Ago : {{month}}</h3>
+	</div>
+</div>
+</br>
+<div class="well well-sm">
+<div class="col-sm-2">
+	<h4>Search criteria : </h4>
+</div>
+<div class="col-sm-*">
+<form class="form-inline" action="{% url 'SearchDataView' %}" method="POST">{% csrf_token %}
+	<div class="form-group">
+        <label class="sr-only" for="username">UserName : </label>
+  		<input class="form-control" type="text" name="username" id="username" placeholder="UserName">
+  	</div>
+  	<div class="form-group">
+  		<label class="sr-only" for="created_on">Created on : </label>
+  		<input class="form-control" type="date" name="created_on" id="created_on" placeholder="Created On">
+  	</div>
+  <div class="form-group">
+  		<label class="sr-only" for="email">email : </label>
+  		<input class="form-control" type="email" name="email" id="email" placeholder="Email">
+  </div>
+ <button type="submit" class="btn btn-default">Search</button>
+   <!--<img src="https://avatars3.githubusercontent.com/u/501?v=4" height="42" width="42"></img>-->
+</form> 
+</div>
+</div>
+<div>
+</br><h3><b>GitHub User details</b></h3></br>
+<table class="table table-striped">
+	<thead>
+      <tr>
+        <th>Login ID</th>
+        <th>Username</th>
+        <th>Email</th>
+        <th>Created On</th>
+        <th>Updated On</th>
+        <th>URL</th>
+        <th>Location</th>
+        <th>Comapany</th>
+      </tr>
+    </thead>
+{% for obj in object_list %}
+<tbody>
+    <tr>
+        <td><img src="{{obj.user_avatar}}" height="35" width="35"></img> {{obj.user_login}}</td>
+        <td>{{obj.user_name}}</td>
+        <td>{{obj.email}}</td>
+        <td>{{obj.created_on}}</td>
+        <td>{{obj.updated_on}}</td>
+        <td><a href="{{obj.html_url}}">{{obj.html_url}}</a></td>
+        <td>{{obj.location}}</td>
+        <td>{{obj.company}}</td>
+      </tr>
+</tbody>
+{% endfor %}
+</div>
+</div>
+</body>
+</html>
